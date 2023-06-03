@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  server:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI= mongodb+srv://ahsannadeem:Homosapien@cluster0.mb4ikch.mongodb.net/?retryWrites=true&w=majority
