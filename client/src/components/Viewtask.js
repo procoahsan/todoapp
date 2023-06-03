@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TaskCard from './Taskcard';
 import axios from 'axios';
 
-export default function ViewTask() {
+export default function ViewTask(props) {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function ViewTask() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [props.isMenuOpen]);
     console.log(tasks);
   const handleDeleteTask = (taskId) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
