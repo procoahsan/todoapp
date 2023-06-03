@@ -7,8 +7,11 @@ import ViewTask from "./Viewtask";
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const[taskview,setTaskview]=useState(true);
 
-
+const handleTaskview=()=>{
+  setTaskview(!taskview);
+}
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -52,10 +55,11 @@ export default function Home() {
         </button>
         <h1 className="text-lg font-bold">To-do today</h1>
         <div className="relative">
-          <button className="p-2" onClick={handleMenuToggle}>
-            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+          <button className="p-2" onClick={handleTaskview}>
+            {taskview ? <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"> <path d="M4 8h16l-8 8-8-8z"></path></svg> : <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"> <path d="M4 16h16l-8-8-8 8z"></path></svg> }
+            {/* <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
               <path d="M4 8h16l-8 8-8-8z"></path>
-            </svg>
+            </svg> */}
           </button>
           {isMenuOpen && (
             <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center z-30">
@@ -74,7 +78,8 @@ export default function Home() {
         </div>
       </div>
       <br />
-      <ViewTask isMenuOpen={isMenuOpen}/>
+      {taskview && <ViewTask isMenuOpen={isMenuOpen}/>}
+      
     </div>
   );
 }

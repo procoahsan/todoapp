@@ -1,22 +1,28 @@
 import React,{useState} from 'react'
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast';
+import { Loading, Grid } from "@nextui-org/react";
 
 export default function Addtask() {
   const [task, setTask] = useState({description: '', completed: false})
+  const [loading, setLoading] = useState(false)
   const taskButton = () => {
+    setLoading(true)
     if(task.description.trim() === ''){
       toast.error('Please enter a task')
+      setLoading(false)
     }
     else{
       axios.post('http://localhost:5000/tasks',task)
       .then(res => {
         console.log(res)
         if(res.status === 200){
+          setLoading(false)
           toast.success('Task added successfully')
           setTask({description: '', completed: false})
         }
         else{
+          setLoading(false)
           toast.error('Task could not be added')
         }
       })
@@ -25,9 +31,14 @@ export default function Addtask() {
       })
     }
   }
-  
+  const onEnterClick = (e) => {
+    if(e.key === 'Enter'){
+      taskButton()
+      // console.log('Enter clicked')
+    }
+    }
   return (
-    <div className="bg-gray-800 shadow-md rounded-md p-4 sm:p-6 w-full sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/4">
+    <div className="bg-gray-800 shadow-md rounded-md p-4 sm:p-6 w-full sm:w-4/5 md:w-3/5 lg:w-full ">
       <h1 className="text-2xl font-bold mb-4 text-white">Add Todo</h1>
       <div className="flex flex-col sm:flex-row items-center">
         <input
@@ -36,11 +47,16 @@ export default function Addtask() {
           className="bg-gray-700 border-gray-600 border rounded-md py-2 px-4 mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto text-white"
           value={task.description}
           onChange={e => setTask({...task, description: e.target.value })}
+          onKeyPress={onEnterClick}
         />
         <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold  rounded-md py-2 px-6 h-12 flex items-center justify-center" onClick={taskButton}>
           Add Task
         </button>
+        
+        {loading && <Grid><Loading color="primary"></Loading></Grid>}
+        
       </div>
+      
       <Toaster />
     </div>
   )
